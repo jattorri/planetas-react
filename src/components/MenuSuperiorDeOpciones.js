@@ -25,8 +25,7 @@ class MenuSuperiorDeOpciones extends React.Component {
                 <Navbar bg="primary" variant="dark">
                     <Navbar.Brand href="/home">Planetas</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/agrupadospordiametro">Agrupados por Diametro</Nav.Link>                        
+                        <Nav.Link href="/">Home</Nav.Link>                       
                     </Nav>
                     <Form inline>
                     <FormControl type="text" id="nombre"placeholder="Search" className="mr-sm-2" value={nombre} onChange={this.changeHandler}/>

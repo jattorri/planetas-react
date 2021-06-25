@@ -11,7 +11,7 @@ class Detalle extends Component{
         super();
         this.state = ({
             db:[],     
-            planeta: []            
+            pais: [],            
         });
     }
 
@@ -20,73 +20,64 @@ class Detalle extends Component{
         this.getPlanetasServer();
       }
     
-      //Este método es llamado cuando un componente se elimina del DOM
       componentWillUnmount(){
         this._isMounted = false;
       }
     
       getPlanetasServer(){
-        //axios.get('http://localhost:8080/instrumento');
-        axios.get('/test/ta/sistema_solar.json') 
+       //tomamos el numero de la url y los buscamos en el array de paises
+        axios.get('https://restcountries.eu/rest/v2') 
         .then(result=>{
-            //console.log(result.data);
             this.setState({db: result.data})  
-            this.setState({planeta: this.state.db[this.props.match.params.id-1]})
+            this.setState({pais: this.state.db[this.props.match.params.id-1]})
             console.log('getplanetas')
-            console.log({planeta: this.state.db[this.props.match.params.id-1]})
+            console.log({pais: this.state.db[this.props.match.params.id-1]})
         })       
         .catch(console.log);
-        //console.log(this.state.db);
-    
+   
     }
 
     render(){
                 
-        const planetaEncontrado = this.state.planeta;        
-        const listaPlanetas = { 
-            1: 'sol', 
-            2: 'mercurio', 
-            3: 'venus', 
-            4: 'tierra', 
-            5: 'marte', 
-            6: 'jupiter', 
-            7: 'saturno', 
-            8: 'urano', 
-            9: 'neptuno', };                      
-        
-        if (Object.keys(planetaEncontrado).length === 0) {
+        const paisEncontrado = this.state.pais;        
+        if (Object.keys(paisEncontrado).length === 0) {
             return ("");
         }        
         
         
         return (
             <React.Fragment>
-                <MenuSuperiorDeOpciones></MenuSuperiorDeOpciones>
-                Detalle {this.props.match.params.id}                              
+                <MenuSuperiorDeOpciones></MenuSuperiorDeOpciones>                         
                 <Container>
-                <Row><br></br></Row>
                     <Row>
                         <Col>
-                            <img src={planetaEncontrado.urlImg} alt="imagen" style={{marginLeft:'3rem'}}/>                                                        
+                                                                               
                             <Row>
-                            {planetaEncontrado.nombre}
+                            <h1>{paisEncontrado.name}</h1>
                             </Row>
+                            <Row>
+                            <img src={paisEncontrado.flag} alt="imagen" /> 
+                            </Row>  
                         </Col>
                         <Col style={{ borderLeftStyle: 'solid', borderLeftWidth: '1px', borderLeftColor: 'lightgrey' }}>
                             <Col>
                             <Row >
-                                <Col style={{color:'grey'}}>Codigo{planetaEncontrado.codigo}</Col>
+                                <Col >Capital {paisEncontrado.capital}</Col>
                             </Row>
-                            <Row >
-                                <Col><h2>Diametro: {planetaEncontrado.diametro}</h2></Col>
-                            </Row>
-                            
-                            
                             <Row>
-                                <Col><h6>Rotacion Dias: {planetaEncontrado.rotacionDias}</h6></Col>
-                            </Row>                            
-                            
+                                <Col><h6>Region: {paisEncontrado.region}</h6></Col>
+                            </Row>
+                            <Row>
+                                <Col><h6>Poblacion: {paisEncontrado.population}</h6></Col>
+                            </Row> 
+                            <Row>
+                                <Col><h6>Superficie: {paisEncontrado.area}</h6></Col>
+                            </Row>
+                            <Row>
+                                <Col><h6>Fronteras: {paisEncontrado.borders}</h6></Col>
+                            </Row>                                    
                             </Col>
+                            
                         </Col>
                     </Row>
                 </Container>

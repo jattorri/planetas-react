@@ -2,12 +2,9 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import MenuSuperiorDeOpciones from './MenuSuperiorDeOpciones';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Tarjeta from './Tarjeta';
-
-
-
-
+import Tabla from './Tabla';
 
 class Home extends Component {
 
@@ -17,6 +14,7 @@ class Home extends Component {
             db: [],
         });
     }
+
     componentDidMount() {
         this._isMounted = true;
         this.getPlanetasServer();
@@ -28,8 +26,7 @@ class Home extends Component {
     }
 
     getPlanetasServer() {
-        //axios.get('http://localhost:8080/instrumento');
-        axios.get('/test/ta/sistema_solar.json')
+        axios.get('https://restcountries.eu/rest/v2')
             .then(result => {
                 this.setState({ db: result.data })
                 console.log(result)  
@@ -38,51 +35,49 @@ class Home extends Component {
     }
 
     render(){
-        const listaPlanetas = { 
-            1: 'sol', 
-            2: 'mercurio', 
-            3: 'venus', 
-            4: 'tierra', 
-            5: 'marte', 
-            6: 'jupiter', 
-            7: 'saturno', 
-            8: 'urano', 
-            9: 'neptuno', };
-            var planetas
-            var nombreParam
-            if (Object.entries(listaPlanetas).some(e => window.location.href.includes(e[1]))) { //Si hay un mes en string en la URL
+        const listaPaises = this.state.db
+        console.log('lista paises')
+        console.log(listaPaises)
 
-                nombreParam = Object.entries(listaPlanetas).find(m => window.location.href.includes(m[1]))[0];    //Guardo su numero correspondiente 
-                planetas = this.state.db.map((planetai, i) => {    
-                    if (planetai.codigo === (parseInt(nombreParam))) {
+            var nombreParam
+            var  paises
+
+
+            if (Object.entries(listaPaises).some(e => window.location.href.includes(e[1]))) { //Si hay un pais en string en la URL
+                nombreParam = Object.entries(listaPaises).find(m => window.location.href.includes(m[1]))[0];
+                console.log('nombreParam')
+                console.log(nombreParam)
+    
+               paises = this.state.db.map((pais, i) => {   
+                    
+                    if (pais.nombre === nombreParam) {
                         console.log('entra al segundo if ')
                         return (
-                            <Tarjeta
-                            key={planetai.id}
-                            codigo={planetai.codigo}
-                            nombre={planetai.nombre}
-                            diametro={planetai.diametro}
-                            rotacionDias={planetai.rotacionDias}
-                            imagen={planetai.urlImg}>
-                            </Tarjeta>
+                            <Tabla
+                            key={pais.name}
+                            capital={pais.capital}
+                            region={pais.region}
+                            poblacion={pais.population}
+                            bandera={pais.flag}
+                           >
+                            </Tabla>
                         )
                     }
                 })
             }
-            else {   //Si no hay mes en la URL
-                planetas = this.state.db.map((planetai, i) => {
+            else {   //Si no hay pais en la URL
+                paises = this.state.db.map((pais, i) => {
                     console.log('entra al eslse')
                     return (
-    
-                        <Tarjeta
-                        key={planetai.id}
-                        codigo={planetai.codigo}
-                        nombre={planetai.nombre}
-                        diametro={planetai.diametro}
-                        srotacionDiaso={planetai.rotacionDias}
-                        imagen={planetai.urlImg}>
-                        </Tarjeta>
-    
+                        <Tabla
+                        key={pais.id}
+                        codigo={pais.callingCodes}
+                        nombre={pais.name}
+                        region={pais.region}
+                        capital={pais.capital}
+                        poblacion={pais.population}
+                        bandera={pais.flag}>
+                        </Tabla>
                     )
                 })
             }
@@ -91,8 +86,10 @@ class Home extends Component {
         <MenuSuperiorDeOpciones></MenuSuperiorDeOpciones>
         <h3>Home</h3>
         <Container className='pt-5'>
-            <Row xs={1} md={4} className='g-4'>
-                {planetas}
+            <Row  xs={2} md={4} className='g-4'>
+            <Col>
+               {paises}
+            </Col>
             </Row>
         </Container>
     </React.Fragment>
